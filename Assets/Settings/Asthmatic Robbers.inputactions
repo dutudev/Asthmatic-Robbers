@@ -7,6 +7,24 @@
             "id": "a12bc3df-a33f-4ff3-a2ce-bc8e8af6b440",
             "actions": [
                 {
+                    "name": "Eject",
+                    "type": "Button",
+                    "id": "a347e17f-8a4f-48f6-8bb6-5bed38f16fe4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "8e6bd302-2b2b-4827-be3f-d151490a07ed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Move",
                     "type": "Value",
                     "id": "6ed688cc-ce19-4fe0-9f63-ed323193c65c",
@@ -49,6 +67,28 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "20510449-ffa2-4136-b511-3145611c17d0",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69f4bb5f-5c9d-40af-8966-fee228cefceb",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Eject",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
