@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private Controls _controls;
     private Rigidbody2D _rb;
+    private SpriteRenderer _spriteRenderer;
     private float _moveDirection;
 
     private List<Item> interactablesInventory = new List<Item>();
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         SetupInput();
     }
 
@@ -29,7 +31,12 @@ public class PlayerController : MonoBehaviour
     {
         _controls = new Controls();
         _controls.Enable();
-        _controls.Player.Move.performed += ctx => _moveDirection = ctx.ReadValue<float>();
+        _controls.Player.Move.performed += ctx => 
+        {
+            _moveDirection = ctx.ReadValue<float>();
+            _spriteRenderer.flipX = _moveDirection < 0;
+            UpdateIteractibles();
+        };
         _controls.Player.Move.canceled += ctx => _moveDirection = 0;
         _controls.Player.Interact.performed += ctx => TryInteract();
         _controls.Player.Eject.performed += ctx => EjectItem();
@@ -106,7 +113,7 @@ public class PlayerController : MonoBehaviour
         {
             var itemCur = interactablesInventory[0];
             //change this for the item currently held + position
-            Instantiate(itemCur.GetPrefab(), transform.position + new Vector3(1.25f, 0.5f, 0), quaternion.identity);
+            Instantiate(itemCur.GetPrefab(), transform.position + new Vector3(_spriteRenderer.flipX ? -1.25f : 1.25f, 0.5f, 0), quaternion.identity);
             print(itemCur.GetName());
             interactablesInventory.RemoveAt(0);
             UpdateIteractibles();
