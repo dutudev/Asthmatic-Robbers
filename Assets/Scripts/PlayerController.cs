@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool(IsMoving, false);
             _moveDirection = 0;
+            UpdateIteractibles();
         };
         _controls.Player.Interact.performed += ctx => TryInteract();
         _controls.Player.Eject.performed += ctx => EjectItem();

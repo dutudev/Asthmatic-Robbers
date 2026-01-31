@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,6 +17,7 @@ public class HouseManager : MonoBehaviour
     private SpriteRenderer _wallSpriteRender;
     private List<Door> mainDoors = new List<Door>();
     private List<Door> stairs = new List<Door>();
+    private List<Item> totalItems = new List<Item>();
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +66,11 @@ public class HouseManager : MonoBehaviour
             if (i == 0)
             {
                 doorsToAdd = Mathf.Ceil(doorsToAdd);
+            }
+
+            if (_rooms > mainDoors.Count + doorsToAdd)
+            {
+                doorsToAdd = _rooms - mainDoors.Count;
             }
             for (j = 0; j < doorsToAdd; j++)
             {
@@ -129,13 +136,17 @@ public class HouseManager : MonoBehaviour
         }
 
         int doors=0;
-        for (i = 0; i <= _rooms; i++)
+        for (i = 0; i < _rooms; i++)
         {
             int numberWalls = Random.Range(4, 9);
             _wallSpriteRender.sprite = wallPapers[Random.Range(0, wallPapers.Count)];
             int j = 0;
             int doorLoc = Random.Range(0, numberWalls);
+            int roomType = Random.Range(0, rooms.Count);
             Instantiate(wallStart, startPos, quaternion.identity);
+            List<Room> roomsTemp = new List<Room>(rooms);
+            Room roomCur = roomsTemp[roomType];
+            List<GameObject> furnitureTemp = new List<GameObject>(roomCur.furniture);
             for (j = 0; j < numberWalls; j++)
             {
                 Instantiate(wall, startPos + new Vector2(5.5f * j, 0), Quaternion.identity);
@@ -145,6 +156,12 @@ public class HouseManager : MonoBehaviour
                     mainDoors[doors].SetPosToMove(dor2.transform.position);
                     dor2.GetComponent<Door>().SetPosToMove(mainDoors[doors].transform.position);
                     doors++;    
+                }else if (Random.Range(0, 101) < 50 && furnitureTemp.Count > 0)
+                {
+                    int chosenFurniture = Random.Range(0, furnitureTemp.Count);
+                    var cur = Instantiate(furnitureTemp[chosenFurniture], startPos + new Vector2(5.5f * j, 0), Quaternion.identity);
+                    furnitureTemp.RemoveAt(chosenFurniture);
+                    cur.GetComponent<SpriteRenderer>().flipX = Random.Range(0, 2) == 0 ? true : false;
                 }
             }
             Instantiate(wallEnd, startPos + new Vector2(5.5f * (j - 1), 0), quaternion.identity);
@@ -158,5 +175,5 @@ public class HouseManager : MonoBehaviour
 class Room
 {
     public List<Item> items = new List<Item>();
-    public List<Sprite> furniture = new List<Sprite>();
+    public List<GameObject> furniture = new List<GameObject>();
 }

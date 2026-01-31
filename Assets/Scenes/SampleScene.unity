@@ -936,7 +936,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Golf Cross
+  m_text: '
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 275622f3d59b976439f0bd02b10fa652, type: 2}
   m_sharedMaterial: {fileID: 5427807883206664999, guid: 275622f3d59b976439f0bd02b10fa652, type: 2}
@@ -963,8 +965,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56
-  m_fontSizeBase: 56
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1340,7 +1342,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Value : 500 lei'
+  m_text: '
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 275622f3d59b976439f0bd02b10fa652, type: 2}
   m_sharedMaterial: {fileID: 5427807883206664999, guid: 275622f3d59b976439f0bd02b10fa652, type: 2}
@@ -1487,7 +1491,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Weight : 1.5 Kg'
+  m_text: '
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 275622f3d59b976439f0bd02b10fa652, type: 2}
   m_sharedMaterial: {fileID: 5427807883206664999, guid: 275622f3d59b976439f0bd02b10fa652, type: 2}
@@ -1691,6 +1697,19 @@ MonoBehaviour:
   - {fileID: -711968288, guid: df7c9c1d862bc5540a795828ac67d84d, type: 3}
   - {fileID: -1554429570, guid: df7c9c1d862bc5540a795828ac67d84d, type: 3}
   - {fileID: -1118789074, guid: df7c9c1d862bc5540a795828ac67d84d, type: 3}
+  rooms:
+  - items: []
+    furniture:
+    - {fileID: 8525760767468317518, guid: 58ebefa5845a34c43995cd82e9eec215, type: 3}
+    - {fileID: 8525760767468317518, guid: e98a9568ef414324b9805f6cb48307d8, type: 3}
+  - items: []
+    furniture:
+    - {fileID: 8525760767468317518, guid: fc67f402b67b03945b7375ace5634467, type: 3}
+    - {fileID: 8525760767468317518, guid: d223dfca49495c14fb3df73fa4ea594a, type: 3}
+  - items: []
+    furniture:
+    - {fileID: 8525760767468317518, guid: eea84ad291fa1fb4db3c7b446a14a16a, type: 3}
+    - {fileID: 8525760767468317518, guid: 36da2e0801a4aca43bb7bbbdd22f8bd4, type: 3}
   difficulty: 2
 --- !u!1 &2032950879
 GameObject:
