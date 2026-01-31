@@ -8,12 +8,14 @@ using Unity.Mathematics;
 
 public class PlayerController : MonoBehaviour
 {
+    private static readonly int IsMoving = Animator.StringToHash("isMoving");
     [SerializeField] private float playerSpeed;
     [SerializeField] private TMP_Text interactText;
 
     private Controls _controls;
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
+    private Animator _animator;
     private float _moveDirection;
 
     private List<Item> interactablesInventory = new List<Item>();
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
         SetupInput();
     }
 
@@ -35,9 +38,14 @@ public class PlayerController : MonoBehaviour
         {
             _moveDirection = ctx.ReadValue<float>();
             _spriteRenderer.flipX = _moveDirection < 0;
+            _animator.SetBool(IsMoving, true);
             UpdateIteractibles();
         };
-        _controls.Player.Move.canceled += ctx => _moveDirection = 0;
+        _controls.Player.Move.canceled += ctx =>
+        {
+            _animator.SetBool(IsMoving, false);
+            _moveDirection = 0;
+        };
         _controls.Player.Interact.performed += ctx => TryInteract();
         _controls.Player.Eject.performed += ctx => EjectItem();
     }
