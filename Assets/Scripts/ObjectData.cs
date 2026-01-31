@@ -7,6 +7,7 @@ public class ObjectData : ScriptableObject
 {
     public string itemName;
     public float weight;
+    public int value;
     public float heightText;
     public Sprite uiImage;
     public GameObject prefab;

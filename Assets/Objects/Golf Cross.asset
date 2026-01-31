@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc09245b5a0f5545842ea6569c031c7, type: 3}
   m_Name: Golf Cross
   m_EditorClassIdentifier: 
-  itemName: Golf Cross
+  itemName: Golf Club
   weight: 1.5
   heightText: 1
   uiImage: {fileID: 21300000, guid: ea518b484ce2b2c4dad0e85694b03ae7, type: 3}

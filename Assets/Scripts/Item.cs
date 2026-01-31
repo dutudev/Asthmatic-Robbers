@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class Item : MonoBehaviour, IInteractible
@@ -26,7 +27,17 @@ public class Item : MonoBehaviour, IInteractible
 
     public string GetName()
     {
-        return objectData.name;
+        return objectData.itemName;
+    }
+
+    public float GetWeight()
+    {
+        return objectData.weight;
+    }
+
+    public int GetValue()
+    {
+        return objectData.value;
     }
 
     public Sprite GetSprite()
