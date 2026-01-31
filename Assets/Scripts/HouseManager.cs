@@ -56,19 +56,19 @@ public class HouseManager : MonoBehaviour
         Vector2 startPos = new Vector2(0, 0);
         int i = 0;
         int stairsTotal = 0;
-        for (i = 0; i <= _floors; i++)
+        for (i = 0; i < _floors; i++)
         {
-            int numberWalls = Random.Range(4, 9) + _rooms / (_floors + 1);
+            int numberWalls = Random.Range(4, 9) + _rooms / _floors;
             _wallSpriteRender.sprite = wallPapers[Random.Range(0, wallPapers.Count)];
             List<int> doorsLoc = new List<int>();
             int j = 0;
-            float doorsToAdd = (float)_rooms / (_floors + 1);
+            float doorsToAdd = (float)_rooms / _floors;
             if (i == 0)
             {
                 doorsToAdd = Mathf.Ceil(doorsToAdd);
             }
 
-            if (_rooms > mainDoors.Count + doorsToAdd)
+            if (_rooms < mainDoors.Count + doorsToAdd)
             {
                 doorsToAdd = _rooms - mainDoors.Count;
             }
@@ -85,7 +85,7 @@ public class HouseManager : MonoBehaviour
             int stair2 = -1;
             if(_floors > 0){
             
-            if (i != _floors)
+            if (i != _floors - 1)
             {
                 stair = Random.Range(0, numberWalls);
                 while (doorsLoc.Contains(stair))
@@ -165,7 +165,13 @@ public class HouseManager : MonoBehaviour
                 }
             }
             Instantiate(wallEnd, startPos + new Vector2(5.5f * (j - 1), 0), quaternion.identity);
-
+            
+            //spawn items
+            int itemsToSpawn = Random.Range(0, 4);
+            for (int y = 0; y < itemsToSpawn; y++)
+            {
+                Instantiate(roomCur.items[Random.Range(0, roomCur.items.Count)], startPos + new Vector2(0, Random.Range(0, 5.5f * (j-1))), Quaternion.identity);
+            }
             startPos += new Vector2(0, -35);
         }
     }
@@ -174,6 +180,6 @@ public class HouseManager : MonoBehaviour
 [System.Serializable]
 class Room
 {
-    public List<Item> items = new List<Item>();
+    public List<GameObject> items = new List<GameObject>();
     public List<GameObject> furniture = new List<GameObject>();
 }
