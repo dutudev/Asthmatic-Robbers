@@ -138,6 +138,7 @@ public class HouseManager : MonoBehaviour
         int doors=0;
         for (i = 0; i < _rooms; i++)
         {
+            print("okok " + i + " " + _rooms);
             int numberWalls = Random.Range(4, 9);
             _wallSpriteRender.sprite = wallPapers[Random.Range(0, wallPapers.Count)];
             int j = 0;
@@ -170,7 +171,11 @@ public class HouseManager : MonoBehaviour
             int itemsToSpawn = Random.Range(0, 4);
             for (int y = 0; y < itemsToSpawn; y++)
             {
-                Instantiate(roomCur.items[Random.Range(0, roomCur.items.Count)], startPos + new Vector2(0, Random.Range(0, 5.5f * (j-1))), Quaternion.identity);
+                if (roomCur.items.Count > 0)
+                {
+                    Instantiate(roomCur.items[Random.Range(0, roomCur.items.Count)], startPos + new Vector2(Random.Range(0, 5.5f * (j-1)), 0), Quaternion.identity);
+                }
+                
             }
             startPos += new Vector2(0, -35);
         }

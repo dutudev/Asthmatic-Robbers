@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abc09245b5a0f5545842ea6569c031c7, type: 3}
-  m_Name: Golf Cross
+  m_Name: HairDryer
   m_EditorClassIdentifier: 
-  itemName: Golf Club
-  weight: 2.5
-  value: 300
-  heightText: 1
-  uiImage: {fileID: 21300000, guid: ea518b484ce2b2c4dad0e85694b03ae7, type: 3}
-  prefab: {fileID: 8017613757107946847, guid: d8ec12501e6182048a68564b51efe769, type: 3}
+  itemName: Hair Dryer
+  weight: 1.4
+  value: 175
+  heightText: 0.6
+  uiImage: {fileID: 21300000, guid: 4fa0335f5d6979b4f85232f93f31fd9c, type: 3}
+  prefab: {fileID: 3150995601027176204, guid: a2c730d2e758ec94dacfbc1286dd7ac2, type: 3}
