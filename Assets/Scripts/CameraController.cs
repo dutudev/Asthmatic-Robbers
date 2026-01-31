@@ -21,4 +21,9 @@ public class CameraController : MonoBehaviour
         _finalLocation = new Vector3(followTarget.transform.position.x + followOffset.x, followTarget.transform.position.y + followOffset.y, -10);
         transform.position = Vector3.Lerp(transform.position, _finalLocation, followSpeed * Time.deltaTime);
     }
+
+    public Vector2 GetOffset()
+    {
+        return followOffset;
+    }
 }

@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AnimationCurve itemImageCurve;
     [SerializeField] private GameObject imageHolder, imagePrefab;
     [SerializeField] private List<TMP_Text> uiTexts;
+    [SerializeField] private Sprite inhalerSprite;
     
     private List<Item> itemsDisplayed = new List<Item>();
     private List<Image> itemsImages = new List<Image>();
@@ -23,10 +24,12 @@ public class UIManager : MonoBehaviour
     {
         instance = this;
         //print();
+        
         foreach (var text in uiTexts)
         {
             uiTextCanvasGroups.Add(text.gameObject.GetComponent<CanvasGroup>());
         }
+        UpdateItems(new List<Item>());
     }
 
     // Update is called once per frame
@@ -46,10 +49,16 @@ public class UIManager : MonoBehaviour
             Destroy(imageHolder.transform.GetChild(i).gameObject);
         }
         // add image for inhaler
-        int itemC = 0;
+        int itemC = -1;
+        var obj = Instantiate(imagePrefab, imageHolder.transform);
+        obj.transform.localPosition = new Vector3(-62, -128 * itemC); // change y
+        obj.GetComponent<Image>().sprite = inhalerSprite;
+        itemsImages.Add(obj.GetComponent<Image>());
+        itemsCanvasGroups.Add(obj.GetComponent<CanvasGroup>());
+        itemC++;
         foreach(var item in itemsDisplayed)
         {
-            var obj = Instantiate(imagePrefab, imageHolder.transform);
+            obj = Instantiate(imagePrefab, imageHolder.transform);
             obj.transform.localPosition = new Vector3(-62, -128 * itemC); // change y
             obj.GetComponent<Image>().sprite = item.GetSprite();
             itemsImages.Add(obj.GetComponent<Image>());
@@ -64,6 +73,7 @@ public class UIManager : MonoBehaviour
             _currentItem = itemsDisplayed.Count - 1;
         }
         AnimateItems();
+        AnimateText();
     }
 
     public void MoveItemUp()
@@ -102,8 +112,18 @@ public class UIManager : MonoBehaviour
         LeanTween.cancel(uiTextCanvasGroups[2].gameObject);
         if (_currentItem == -1)
         {
+            uiTexts[0].text = "Inhaler";
+            uiTexts[1].text = "Press Space to use";
+            uiTexts[2].text = "";
+            uiTextCanvasGroups[0].alpha = 0;
+            uiTextCanvasGroups[1].alpha = 0;
+            uiTextCanvasGroups[2].alpha = 0;
+            LeanTween.alphaCanvas(uiTextCanvasGroups[0], 1, 0.6f).setEaseOutExpo();
+            LeanTween.alphaCanvas(uiTextCanvasGroups[1], 1, 0.6f).setEaseOutExpo();
+            LeanTween.alphaCanvas(uiTextCanvasGroups[2], 1, 0.6f).setEaseOutExpo();
             return;
         }
+
         uiTexts[0].text = itemsDisplayed[_currentItem].GetName();
         uiTexts[1].text = "Weight : " + itemsDisplayed[_currentItem].GetWeight();
         uiTexts[2].text = "Value : " + itemsDisplayed[_currentItem].GetValue();

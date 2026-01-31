@@ -89,7 +89,21 @@ public class PlayerController : MonoBehaviour
         {
             interactText.gameObject.SetActive(true);
             //add different text for object / door / stairs etc.
-            interactText.text = "Pickup : E";
+            if (interactablesNear[0].CompareTag("Item"))
+            {
+                interactText.text = "Pickup : E"; 
+            }else if (interactablesNear[0].CompareTag("Door"))
+            {
+                interactText.text = "Enter Room : E";
+            }else if (interactablesNear[0].CompareTag("Stair") && !interactablesNear[0].GetComponent<SpriteRenderer>().flipX )
+            {
+                interactText.text = "Go up : E";
+            }
+            else if (interactablesNear[0].CompareTag("Stair") && interactablesNear[0].GetComponent<SpriteRenderer>().flipX )
+            {
+                interactText.text = "Go down : E";
+            }
+            
 
         }
         else
@@ -98,8 +112,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
 
+    public void MoveToPos(Vector2 pos)
+    {
+        transform.position = pos;
+        Camera.main.transform.position = pos + Camera.main.GetComponent<CameraController>().GetOffset();
+    }
 
     private void TryInteract()
     {
@@ -112,6 +130,12 @@ public class PlayerController : MonoBehaviour
                 interactablesInventory.Add(itemCur);
                 itemCur.Interact();
                 UIManager.instance.UpdateItems(interactablesInventory);
+            }else if (interactablesNear[0].CompareTag("Door"))
+            {
+                interactablesNear[0].Interact();
+            }else if (interactablesNear[0].CompareTag("Stair"))
+            {
+                interactablesNear[0].Interact();
             }
             UpdateIteractibles();
         }

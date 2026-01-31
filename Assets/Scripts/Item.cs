@@ -9,13 +9,12 @@ public class Item : MonoBehaviour, IInteractible
 {
     [SerializeField] private ObjectData objectData;
     
-    public void Interact()
+    public virtual void Interact()
     {
-        
         Destroy(gameObject);
     }
 
-    public float GetTextHeight()
+    public virtual float GetTextHeight()
     {
         return objectData.heightText;
     }
@@ -47,7 +46,7 @@ public class Item : MonoBehaviour, IInteractible
     
     public void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y + objectData.heightText));
+        //Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y + objectData.heightText));
     }
 }
 
