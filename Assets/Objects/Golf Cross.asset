@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Golf Cross
   weight: 1.5
   heightText: 1
-  uiImage: {fileID: 0}
+  uiImage: {fileID: 21300000, guid: ea518b484ce2b2c4dad0e85694b03ae7, type: 3}
   prefab: {fileID: 8017613757107946847, guid: d8ec12501e6182048a68564b51efe769, type: 3}

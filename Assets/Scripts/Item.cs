@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Item : MonoBehaviour, IInteractible
 {
@@ -26,6 +27,11 @@ public class Item : MonoBehaviour, IInteractible
     public string GetName()
     {
         return objectData.name;
+    }
+
+    public Sprite GetSprite()
+    {
+        return objectData.uiImage;
     }
     
     public void OnDrawGizmos()

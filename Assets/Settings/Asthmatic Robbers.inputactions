@@ -7,6 +7,24 @@
             "id": "a12bc3df-a33f-4ff3-a2ce-bc8e8af6b440",
             "actions": [
                 {
+                    "name": "SelectItemUp",
+                    "type": "Button",
+                    "id": "3d6191d2-d601-4277-8720-8e8fd0c59982",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectItemDown",
+                    "type": "Button",
+                    "id": "1b929435-1a72-4cdc-95bf-9f6af37a9707",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Eject",
                     "type": "Button",
                     "id": "a347e17f-8a4f-48f6-8bb6-5bed38f16fe4",
@@ -87,6 +105,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Eject",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3c86b353-1bf8-4375-a39a-6882107cf2ff",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectItemUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e21b2c9-1477-42e9-86cd-815f5d5b42d1",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectItemUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69d9027d-8afb-419a-897e-85ac093c4e32",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectItemDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15f8898c-ad80-4f1f-bda3-cc84865298a7",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectItemDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

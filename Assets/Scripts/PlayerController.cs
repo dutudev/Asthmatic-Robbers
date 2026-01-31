@@ -8,7 +8,7 @@ using Unity.Mathematics;
 
 public class PlayerController : MonoBehaviour
 {
-    private static readonly int IsMoving = Animator.StringToHash("isMoving");
+    
     [SerializeField] private float playerSpeed;
     [SerializeField] private TMP_Text interactText;
 
@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
     private List<Item> interactablesInventory = new List<Item>();
     private List<Item> interactablesNear = new List<Item>();
-
+    private static readonly int IsMoving = Animator.StringToHash("isMoving");
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour
         };
         _controls.Player.Interact.performed += ctx => TryInteract();
         _controls.Player.Eject.performed += ctx => EjectItem();
+        _controls.Player.SelectItemUp.performed += ctx => UIManager.instance.MoveItemUp();
+        _controls.Player.SelectItemDown.performed += ctx => UIManager.instance.MoveItemDown();
     }
 
     private void Move()
@@ -109,7 +111,7 @@ public class PlayerController : MonoBehaviour
                 interactablesNear.RemoveAt(0);
                 interactablesInventory.Add(itemCur);
                 itemCur.Interact();
-                
+                UIManager.instance.UpdateItems(interactablesInventory);
             }
             UpdateIteractibles();
         }
@@ -117,13 +119,14 @@ public class PlayerController : MonoBehaviour
 
     private void EjectItem()
     {
-        if (interactablesInventory.Count > 0)
+        if (interactablesInventory.Count > 0 && UIManager.instance.GetCurrentItem() != -1)
         {
-            var itemCur = interactablesInventory[0];
+            var itemCur = interactablesInventory[UIManager.instance.GetCurrentItem()];
             //change this for the item currently held + position
             Instantiate(itemCur.GetPrefab(), transform.position + new Vector3(_spriteRenderer.flipX ? -1.25f : 1.25f, 0.5f, 0), quaternion.identity);
             print(itemCur.GetName());
-            interactablesInventory.RemoveAt(0);
+            interactablesInventory.RemoveAt(UIManager.instance.GetCurrentItem());
+            UIManager.instance.UpdateItems(interactablesInventory);
             UpdateIteractibles();
             
         }

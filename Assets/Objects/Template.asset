@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: template
   weight: 1.2
   heightText: 1
-  uiImage: {fileID: 0}
+  uiImage: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   prefab: {fileID: 7176151330137878833, guid: fff6248570d454541838ac5fc83bf4f0, type: 3}

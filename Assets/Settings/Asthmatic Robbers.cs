@@ -93,6 +93,24 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""a12bc3df-a33f-4ff3-a2ce-bc8e8af6b440"",
             ""actions"": [
                 {
+                    ""name"": ""SelectItemUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""3d6191d2-d601-4277-8720-8e8fd0c59982"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectItemDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b929435-1a72-4cdc-95bf-9f6af37a9707"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Eject"",
                     ""type"": ""Button"",
                     ""id"": ""a347e17f-8a4f-48f6-8bb6-5bed38f16fe4"",
@@ -175,6 +193,50 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Eject"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c86b353-1bf8-4375-a39a-6882107cf2ff"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItemUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e21b2c9-1477-42e9-86cd-815f5d5b42d1"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItemUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69d9027d-8afb-419a-897e-85ac093c4e32"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItemDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15f8898c-ad80-4f1f-bda3-cc84865298a7"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItemDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -244,6 +306,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_SelectItemUp = m_Player.FindAction("SelectItemUp", throwIfNotFound: true);
+        m_Player_SelectItemDown = m_Player.FindAction("SelectItemDown", throwIfNotFound: true);
         m_Player_Eject = m_Player.FindAction("Eject", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -327,6 +391,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
+    private readonly InputAction m_Player_SelectItemUp;
+    private readonly InputAction m_Player_SelectItemDown;
     private readonly InputAction m_Player_Eject;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Move;
@@ -341,6 +407,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectItemUp".
+        /// </summary>
+        public InputAction @SelectItemUp => m_Wrapper.m_Player_SelectItemUp;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectItemDown".
+        /// </summary>
+        public InputAction @SelectItemDown => m_Wrapper.m_Player_SelectItemDown;
         /// <summary>
         /// Provides access to the underlying input action "Player/Eject".
         /// </summary>
@@ -379,6 +453,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+            @SelectItemUp.started += instance.OnSelectItemUp;
+            @SelectItemUp.performed += instance.OnSelectItemUp;
+            @SelectItemUp.canceled += instance.OnSelectItemUp;
+            @SelectItemDown.started += instance.OnSelectItemDown;
+            @SelectItemDown.performed += instance.OnSelectItemDown;
+            @SelectItemDown.canceled += instance.OnSelectItemDown;
             @Eject.started += instance.OnEject;
             @Eject.performed += instance.OnEject;
             @Eject.canceled += instance.OnEject;
@@ -399,6 +479,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="PlayerActions" />
         private void UnregisterCallbacks(IPlayerActions instance)
         {
+            @SelectItemUp.started -= instance.OnSelectItemUp;
+            @SelectItemUp.performed -= instance.OnSelectItemUp;
+            @SelectItemUp.canceled -= instance.OnSelectItemUp;
+            @SelectItemDown.started -= instance.OnSelectItemDown;
+            @SelectItemDown.performed -= instance.OnSelectItemDown;
+            @SelectItemDown.canceled -= instance.OnSelectItemDown;
             @Eject.started -= instance.OnEject;
             @Eject.performed -= instance.OnEject;
             @Eject.canceled -= instance.OnEject;
@@ -513,6 +599,20 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
     public interface IPlayerActions
     {
+        /// <summary>
+        /// Method invoked when associated input action "SelectItemUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectItemUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectItemDown" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectItemDown(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Eject" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
