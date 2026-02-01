@@ -42,25 +42,29 @@ public class PlayerController : MonoBehaviour
     {
         _controls = new Controls();
         _controls.Enable();
-        _controls.Player.Move.performed += ctx => 
-        {
-            _moveDirection = ctx.ReadValue<float>();
-            _spriteRenderer.flipX = _moveDirection < 0;
-            maskSpriteRenderer.flipX = _spriteRenderer.flipX;
-            _animator.SetBool(IsMoving, true);
-            UpdateIteractibles();
-        };
-        _controls.Player.Move.canceled += ctx =>
-        {
-            _animator.SetBool(IsMoving, false);
-            _moveDirection = 0;
-            UpdateIteractibles();
-        };
+        _controls.Player.Move.performed += ctx => PerformedMove(ctx);
+        _controls.Player.Move.canceled += ctx => CanceledMove(ctx);
         _controls.Player.Interact.performed += ctx => TryInteract();
         _controls.Player.Eject.performed += ctx => EjectItem();
         _controls.Player.SelectItemUp.performed += ctx => UIManager.instance.MoveItemUp();
         _controls.Player.SelectItemDown.performed += ctx => UIManager.instance.MoveItemDown();
         _controls.Player.Mask.performed += ctx => ToggleMask();
+    }
+
+    private void PerformedMove(InputAction.CallbackContext ctx)
+    {
+        _moveDirection = ctx.ReadValue<float>();
+        _spriteRenderer.flipX = _moveDirection < 0;
+        maskSpriteRenderer.flipX = _spriteRenderer.flipX;
+        _animator.SetBool(IsMoving, true);
+        UpdateIteractibles();
+    }
+
+    private void CanceledMove(InputAction.CallbackContext ctx)
+    {
+        _animator.SetBool(IsMoving, false);
+        _moveDirection = 0;
+        UpdateIteractibles();
     }
 
     private void Move()
@@ -243,6 +247,7 @@ public class PlayerController : MonoBehaviour
         {
             UIManager.instance.SetLeftVal(valueFinalCounter.GetValue());
             UIManager.instance.ShowMenu(1, 0);
+            _controls.Disable();
         }
     }
 
