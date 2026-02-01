@@ -127,6 +127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectData: {fileID: 11400000, guid: 0048f2aac9dfb5a42adf4378f4f2264e, type: 2}
+  objectDataRuntime:
+    weight: 0
+    value: 0
 --- !u!60 &1927141719795674552
 PolygonCollider2D:
   m_ObjectHideFlags: 0

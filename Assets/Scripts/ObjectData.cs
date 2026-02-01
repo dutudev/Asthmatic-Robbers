@@ -12,3 +12,10 @@ public class ObjectData : ScriptableObject
     public Sprite uiImage;
     public GameObject prefab;
 }
+
+[System.Serializable]
+public class ObjectDataRuntime
+{
+    public float weight;
+    public int value;
+}

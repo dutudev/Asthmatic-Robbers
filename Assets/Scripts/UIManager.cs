@@ -12,12 +12,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject imageHolder, imagePrefab;
     [SerializeField] private List<TMP_Text> uiTexts;
     [SerializeField] private Sprite inhalerSprite;
+    [SerializeField] private Image exposureImage, staminaImage;
+    [SerializeField] private CanvasGroup weightMax;
     
     private List<Item> itemsDisplayed = new List<Item>();
     private List<Image> itemsImages = new List<Image>();
     private List<CanvasGroup> itemsCanvasGroups = new List<CanvasGroup>();
     private List<CanvasGroup> uiTextCanvasGroups = new List<CanvasGroup>();
     private int _currentItem = 0; // -1 for inhaler?
+    private Vector2 startPosStats1, startPosStats2;
     public static UIManager instance { get; private set; }
 
     private void Awake()
@@ -30,12 +33,15 @@ public class UIManager : MonoBehaviour
             uiTextCanvasGroups.Add(text.gameObject.GetComponent<CanvasGroup>());
         }
         UpdateItems(new List<Item>());
+        startPosStats1 = exposureImage.transform.parent.transform.localPosition;
+        startPosStats2 = staminaImage.transform.parent.transform.localPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
         RotateItemImages();
+        AnimateStatsImages();
     }
 
     public void UpdateItems(List<Item> items)
@@ -113,8 +119,8 @@ public class UIManager : MonoBehaviour
         if (_currentItem == -1)
         {
             uiTexts[0].text = "Inhaler";
-            uiTexts[1].text = "Press Space to use";
-            uiTexts[2].text = "";
+            uiTexts[1].text = "Press Q to use";
+            uiTexts[2].text = "Makes you visible";
             uiTextCanvasGroups[0].alpha = 0;
             uiTextCanvasGroups[1].alpha = 0;
             uiTextCanvasGroups[2].alpha = 0;
@@ -147,6 +153,12 @@ public class UIManager : MonoBehaviour
             UpdateItemImages();
         });
     }
+    
+    void AnimateStatsImages()
+    {
+        exposureImage.transform.parent.transform.localPosition = startPosStats1 + new Vector2(0, Mathf.Sin(Time.time * Mathf.PI / 2) * 15f);
+        staminaImage.transform.parent.transform.localPosition = startPosStats2 + new Vector2(0, Mathf.Sin((Time.time + 0.5f) * Mathf.PI / 2) * 15f);
+    }
 
     void UpdateItemImages()
     {
@@ -161,6 +173,20 @@ public class UIManager : MonoBehaviour
             Vector2 positionBased = item.transform.localPosition + imageHolder.transform.localPosition;
             item.alpha = itemImageCurve.Evaluate(0.5f + Mathf.Abs((positionBased.y - 39f) / 384f));
         }
+    }
+
+    public void UpdateStatsImages(float exposure, float stamina)
+    {
+        exposureImage.fillAmount = exposure;
+        staminaImage.fillAmount = stamina;
+    }
+
+    public void ShowMaxReach()
+    {
+        LeanTween.cancel(weightMax.gameObject);
+        weightMax.alpha = 0;
+        LeanTween.alphaCanvas(weightMax, 1, 0.5f).setEaseOutExpo();
+        LeanTween.alphaCanvas(weightMax, 0, 0.5f).setEaseOutExpo().setDelay(1f);
     }
 
     void RotateItemImages()

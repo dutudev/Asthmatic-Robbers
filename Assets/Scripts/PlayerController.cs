@@ -5,19 +5,26 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Mathematics;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    
+
     [SerializeField] private float playerSpeed;
     [SerializeField] private TMP_Text interactText;
+    [SerializeField] private SpriteRenderer maskSpriteRenderer;
 
     private Controls _controls;
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     private float _moveDirection;
-
+    private bool _hasMask = false;
+    private bool _isExposed = false;
+    private float _stamina = 1f, _exposure = 1f;
+    private float _maxWeight = 8.5f, _allWeight;
+    private float _lastInhale = 0;
+    
     private List<Item> interactablesInventory = new List<Item>();
     private List<Item> interactablesNear = new List<Item>();
     private static readonly int IsMoving = Animator.StringToHash("isMoving");
@@ -38,6 +45,7 @@ public class PlayerController : MonoBehaviour
         {
             _moveDirection = ctx.ReadValue<float>();
             _spriteRenderer.flipX = _moveDirection < 0;
+            maskSpriteRenderer.flipX = _spriteRenderer.flipX;
             _animator.SetBool(IsMoving, true);
             UpdateIteractibles();
         };
@@ -51,11 +59,18 @@ public class PlayerController : MonoBehaviour
         _controls.Player.Eject.performed += ctx => EjectItem();
         _controls.Player.SelectItemUp.performed += ctx => UIManager.instance.MoveItemUp();
         _controls.Player.SelectItemDown.performed += ctx => UIManager.instance.MoveItemDown();
+        _controls.Player.Mask.performed += ctx => ToggleMask();
     }
 
     private void Move()
     {
-        _rb.velocity = new Vector2(_moveDirection * playerSpeed, _rb.velocity.y);
+        float t = 1f - _allWeight / _maxWeight;
+        if (_lastInhale > Time.time)
+        {
+            _rb.velocity = new Vector2(0, _rb.velocity.y);
+            return;
+        }
+        _rb.velocity = new Vector2(_moveDirection * Mathf.Lerp(playerSpeed / 1.5f, playerSpeed, t), _rb.velocity.y + 0.05f);
     }
 
     private void FixedUpdate()
@@ -69,6 +84,21 @@ public class PlayerController : MonoBehaviour
         {
             interactText.gameObject.transform.position = interactablesNear[0].transform.position + new Vector3(0, interactablesNear[0].GetTextHeight());
         }
+
+        float staminaDecrease = 60;
+        if (_hasMask)
+        {
+            staminaDecrease = 10;
+        }
+
+        _stamina -= 1 / staminaDecrease * Time.deltaTime;
+
+        if (_isExposed && !_hasMask)
+        {
+            _exposure -= 1f / 5f * Time.deltaTime;
+        }
+        
+        UIManager.instance.UpdateStatsImages(_exposure, _stamina);
     }
     
     public void AddToList(GameObject item)
@@ -127,6 +157,11 @@ public class PlayerController : MonoBehaviour
             var itemCur = interactablesNear[0];
             if (interactablesNear[0].CompareTag("Item"))
             {
+                if (interactablesNear[0].GetWeight() + _allWeight > _maxWeight)
+                {
+                    UIManager.instance.ShowMaxReach();
+                    return;
+                }
                 interactablesNear.RemoveAt(0);
                 interactablesInventory.Add(itemCur);
                 itemCur.Interact();
@@ -139,6 +174,7 @@ public class PlayerController : MonoBehaviour
                 interactablesNear[0].Interact();
             }
             UpdateIteractibles();
+            UpdateWeight();
         }
     }
 
@@ -148,12 +184,51 @@ public class PlayerController : MonoBehaviour
         {
             var itemCur = interactablesInventory[UIManager.instance.GetCurrentItem()];
             //change this for the item currently held + position
-            Instantiate(itemCur.GetPrefab(), transform.position + new Vector3(_spriteRenderer.flipX ? -1.25f : 1.25f, 0.5f, 0), quaternion.identity);
-            print(itemCur.GetName());
+            var item = Instantiate(itemCur.GetPrefab(), transform.position + new Vector3(_spriteRenderer.flipX ? -1.25f : 1.25f, 0.5f, 0), quaternion.identity);
+            item.GetComponent<Item>().SetObjectData(interactablesInventory[UIManager.instance.GetCurrentItem()].GetDataRuntime());
+            //print(itemCur.GetName());
             interactablesInventory.RemoveAt(UIManager.instance.GetCurrentItem());
             UIManager.instance.UpdateItems(interactablesInventory);
             UpdateIteractibles();
-            
+            UpdateWeight();
+        }
+        else if(_lastInhale < Time.time)
+        {
+            _lastInhale = Time.time + 1f;
+            _stamina += 0.6f;
+            _stamina = Mathf.Clamp01(_stamina);
+            _exposure -= 0.05f;
+        }
+    }
+
+    private void UpdateWeight()
+    {
+        _allWeight = 0;
+        foreach (var item in interactablesInventory)
+        {
+            _allWeight += item.GetWeight();
+        }
+    }
+
+    private void ToggleMask()
+    {
+        _hasMask = !_hasMask;
+        maskSpriteRenderer.gameObject.SetActive(_hasMask);
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Camera"))
+        {
+            _isExposed = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Camera"))
+        {
+            _isExposed = false;
         }
     }
 }

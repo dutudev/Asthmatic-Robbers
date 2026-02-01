@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class HouseManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject wall, door, wallStart, wallEnd, stairO;
+    [SerializeField] private GameObject wall, door, wallStart, wallEnd, stairO, camera;
     [SerializeField] private List<Sprite> wallPapers = new List<Sprite>();
     [SerializeField] private List<Room> rooms = new List<Room>();
     [SerializeField] private int difficulty = 0;
@@ -129,9 +129,15 @@ public class HouseManager : MonoBehaviour
                     }
                     stairsTotal++;
                 }
+
+                
             }
             Instantiate(wallEnd, startPos + new Vector2(5.5f * (j - 1), 0), quaternion.identity);
-
+            int nrCam = Random.Range(1, 6);
+            for (int w = 0; w < nrCam; w++)
+            {
+                Instantiate(camera, startPos + new Vector2(Random.Range(0, 5.5f * (j - 1)), 2.45f), Quaternion.identity);
+            }
             startPos += new Vector2(0, -35);
         }
 
@@ -168,7 +174,11 @@ public class HouseManager : MonoBehaviour
             Instantiate(wallEnd, startPos + new Vector2(5.5f * (j - 1), 0), quaternion.identity);
             
             //spawn items
-            int itemsToSpawn = Random.Range(0, 4);
+            int itemsToSpawn = 0;
+            if (Random.Range(1, 101) > 15)
+            {
+                itemsToSpawn = Random.Range(1, 4);
+            }
             for (int y = 0; y < itemsToSpawn; y++)
             {
                 if (roomCur.items.Count > 0)
@@ -177,7 +187,13 @@ public class HouseManager : MonoBehaviour
                 }
                 
             }
+            int nrCam2 = Random.Range(1, 6);
+            for (int w2 = 0; w2 < nrCam2; w2++)
+            {
+                Instantiate(camera, startPos + new Vector2(Random.Range(0, 5.5f * (j - 1)), 2.45f), Quaternion.identity);
+            }
             startPos += new Vector2(0, -35);
+            
         }
     }
 }

@@ -172,3 +172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectData: {fileID: 11400000, guid: 7526f418514bf77418be7495f68c680a, type: 2}
+  objectDataRuntime:
+    weight: 0
+    value: 0

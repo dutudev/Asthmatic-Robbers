@@ -127,6 +127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectData: {fileID: 11400000, guid: 6e95c7e6ea8855548bdc90f09e873c65, type: 2}
+  objectDataRuntime:
+    weight: 0
+    value: 0
 --- !u!61 &779186787924233710
 BoxCollider2D:
   m_ObjectHideFlags: 0

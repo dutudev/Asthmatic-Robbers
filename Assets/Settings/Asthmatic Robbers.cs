@@ -136,6 +136,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Mask"",
+                    ""type"": ""Button"",
+                    ""id"": ""f91d5150-4636-4f28-b77f-f51ff69ce85b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -237,6 +246,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""SelectItemDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""55d0c311-5413-4708-b0c1-9ceafdef21f8"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -311,6 +331,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Eject = m_Player.FindAction("Eject", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_Mask = m_Player.FindAction("Mask", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -396,6 +417,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Eject;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_Mask;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -427,6 +449,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Mask".
+        /// </summary>
+        public InputAction @Mask => m_Wrapper.m_Player_Mask;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -468,6 +494,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Mask.started += instance.OnMask;
+            @Mask.performed += instance.OnMask;
+            @Mask.canceled += instance.OnMask;
         }
 
         /// <summary>
@@ -494,6 +523,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Mask.started -= instance.OnMask;
+            @Mask.performed -= instance.OnMask;
+            @Mask.canceled -= instance.OnMask;
         }
 
         /// <summary>
@@ -634,5 +666,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Mask" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMask(InputAction.CallbackContext context);
     }
 }
