@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private AnimationCurve itemImageCurve;
-    [SerializeField] private GameObject imageHolder, imagePrefab;
-    [SerializeField] private List<TMP_Text> uiTexts;
+    [SerializeField] private GameObject imageHolder, imagePrefab, fumbledMenu, winMenu;
+    [SerializeField] private List<TMP_Text> uiTexts, menuTexts;
     [SerializeField] private Sprite inhalerSprite;
     [SerializeField] private Image exposureImage, staminaImage;
     [SerializeField] private CanvasGroup weightMax;
@@ -19,7 +20,7 @@ public class UIManager : MonoBehaviour
     private List<Image> itemsImages = new List<Image>();
     private List<CanvasGroup> itemsCanvasGroups = new List<CanvasGroup>();
     private List<CanvasGroup> uiTextCanvasGroups = new List<CanvasGroup>();
-    private int _currentItem = 0; // -1 for inhaler?
+    private int _currentItem = 0, _houseVal = 0, _leftVal =0 ; // -1 for inhaler?
     private Vector2 startPosStats1, startPosStats2;
     public static UIManager instance { get; private set; }
 
@@ -195,5 +196,45 @@ public class UIManager : MonoBehaviour
         {
             item.gameObject.transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time) * 15);
         }
+    }
+
+    public void ShowMenu(int i, int j)
+    {
+        Time.timeScale = 0;
+        if (i == 0)
+        {
+            fumbledMenu.SetActive(true);
+            if (j == 0)
+            {
+                menuTexts[0].text = "You got caught";
+            }
+            else
+            {
+                menuTexts[0].text = "You lost your breath";
+            }
+        }
+        else
+        {
+            winMenu.SetActive(true);
+            
+            menuTexts[1].text = "Picked up value : " + _leftVal + "\nHouse value : " + _houseVal;
+        }
+    }
+
+    public void SetTotalHouseVal(int set)
+    {
+        _houseVal = set;
+    }
+
+    public void SetLeftVal(int set)
+    {
+        _leftVal = set;
+    }
+
+    public void GoToMenu()
+    {
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene("MainMenu");
+        
     }
 }

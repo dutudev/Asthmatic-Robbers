@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float playerSpeed;
     [SerializeField] private TMP_Text interactText;
     [SerializeField] private SpriteRenderer maskSpriteRenderer;
+    [SerializeField] private ValueFinalCounter valueFinalCounter;
 
     private Controls _controls;
     private Rigidbody2D _rb;
@@ -99,6 +100,16 @@ public class PlayerController : MonoBehaviour
         }
         
         UIManager.instance.UpdateStatsImages(_exposure, _stamina);
+
+        if (_exposure <= 0)
+        {
+            UIManager.instance.ShowMenu(0, 0);
+        }
+        if (_stamina <= 0)
+        {
+            UIManager.instance.ShowMenu(0, 1);
+        }
+
     }
     
     public void AddToList(GameObject item)
@@ -214,6 +225,25 @@ public class PlayerController : MonoBehaviour
     {
         _hasMask = !_hasMask;
         maskSpriteRenderer.gameObject.SetActive(_hasMask);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Entry"))
+        {
+            MoveToPos(new Vector2(0, -0.7f));
+        }
+
+        if (other.CompareTag("LeaveHouse"))
+        {
+            MoveToPos(new Vector2(2.3f, 70f));
+        }
+
+        if (other.CompareTag("Leave"))
+        {
+            UIManager.instance.SetLeftVal(valueFinalCounter.GetValue());
+            UIManager.instance.ShowMenu(1, 0);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)

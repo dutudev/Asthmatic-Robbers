@@ -105,7 +105,13 @@ public class HouseManager : MonoBehaviour
                 }
             }
             }
-            Instantiate(wallStart, startPos, quaternion.identity);
+            var wallStarty = Instantiate(wallStart, startPos, quaternion.identity);
+            if (i == 0)
+            {
+                wallStarty.transform.GetChild(0).tag = "LeaveHouse";
+                wallStarty.transform.GetChild(0).GetComponent<BoxCollider2D>().isTrigger = true;
+                wallStarty.transform.GetChild(0).gameObject.layer = 11;
+            }
             
             for (j = 0; j < numberWalls; j++)
             {
@@ -183,7 +189,8 @@ public class HouseManager : MonoBehaviour
             {
                 if (roomCur.items.Count > 0)
                 {
-                    Instantiate(roomCur.items[Random.Range(0, roomCur.items.Count)], startPos + new Vector2(Random.Range(0, 5.5f * (j-1)), 0), Quaternion.identity);
+                    var itemus = Instantiate(roomCur.items[Random.Range(0, roomCur.items.Count)], startPos + new Vector2(Random.Range(0, 5.5f * (j-1)), 0), Quaternion.identity);
+                    totalItems.Add(itemus.GetComponent<Item>());
                 }
                 
             }
@@ -195,6 +202,14 @@ public class HouseManager : MonoBehaviour
             startPos += new Vector2(0, -35);
             
         }
+        
+        int houseval = 0;
+        foreach (var item in totalItems)
+        {
+            houseval += item.GetValue();
+        }
+        UIManager.instance.SetTotalHouseVal(houseval);
+        
     }
 }
 

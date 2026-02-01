@@ -8,6 +8,9 @@ TagManager:
   - Door
   - Stair
   - Camera
+  - Entry
+  - LeaveHouse
+  - Leave
   layers:
   - Default
   - TransparentFX
