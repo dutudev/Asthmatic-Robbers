@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private float _moveDirection;
     private bool _hasMask = false;
     private bool _isExposed = false;
+    private bool _died = false;
     private float _stamina = 1f, _exposure = 1f;
     private float _maxWeight = 8.5f, _allWeight;
     private float _lastInhale = 0;
@@ -42,13 +43,13 @@ public class PlayerController : MonoBehaviour
     {
         _controls = new Controls();
         _controls.Enable();
-        _controls.Player.Move.performed += ctx => PerformedMove(ctx);
-        _controls.Player.Move.canceled += ctx => CanceledMove(ctx);
-        _controls.Player.Interact.performed += ctx => TryInteract();
-        _controls.Player.Eject.performed += ctx => EjectItem();
-        _controls.Player.SelectItemUp.performed += ctx => UIManager.instance.MoveItemUp();
-        _controls.Player.SelectItemDown.performed += ctx => UIManager.instance.MoveItemDown();
-        _controls.Player.Mask.performed += ctx => ToggleMask();
+        _controls.Player.Move.performed += PerformedMove;
+        _controls.Player.Move.canceled +=CanceledMove;
+        _controls.Player.Interact.performed +=  TryInteract;
+        _controls.Player.Eject.performed += EjectItem;
+        _controls.Player.SelectItemUp.performed += MoveMenuUp;
+        _controls.Player.SelectItemDown.performed += MoveMenuDown;
+        _controls.Player.Mask.performed += ToggleMask;
     }
 
     private void PerformedMove(InputAction.CallbackContext ctx)
@@ -105,12 +106,14 @@ public class PlayerController : MonoBehaviour
         
         UIManager.instance.UpdateStatsImages(_exposure, _stamina);
 
-        if (_exposure <= 0)
+        if (_exposure <= 0 && !_died)
         {
+            _died = true;  
             UIManager.instance.ShowMenu(0, 0);
         }
-        if (_stamina <= 0)
+        if (_stamina <= 0 && !_died)
         {
+            _died = true;
             UIManager.instance.ShowMenu(0, 1);
         }
 
@@ -165,7 +168,7 @@ public class PlayerController : MonoBehaviour
         Camera.main.transform.position = pos + Camera.main.GetComponent<CameraController>().GetOffset();
     }
 
-    private void TryInteract()
+    private void TryInteract(InputAction.CallbackContext ctx)
     {
         if (interactablesNear.Count > 0)
         {
@@ -193,7 +196,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void EjectItem()
+    private void EjectItem(InputAction.CallbackContext ctx)
     {
         if (interactablesInventory.Count > 0 && UIManager.instance.GetCurrentItem() != -1)
         {
@@ -225,10 +228,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ToggleMask()
+    private void ToggleMask(InputAction.CallbackContext ctx)
     {
         _hasMask = !_hasMask;
         maskSpriteRenderer.gameObject.SetActive(_hasMask);
+    }
+
+    private void MoveMenuUp(InputAction.CallbackContext ctx)
+    {
+        UIManager.instance.MoveItemUp();
+    }
+    
+    private void MoveMenuDown(InputAction.CallbackContext ctx)
+    {
+        UIManager.instance.MoveItemDown();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -247,7 +260,6 @@ public class PlayerController : MonoBehaviour
         {
             UIManager.instance.SetLeftVal(valueFinalCounter.GetValue());
             UIManager.instance.ShowMenu(1, 0);
-            _controls.Disable();
         }
     }
 
@@ -265,5 +277,18 @@ public class PlayerController : MonoBehaviour
         {
             _isExposed = false;
         }
+    }
+
+    private void OnDestroy()
+    {
+        _controls.Player.Move.performed -= PerformedMove;
+        _controls.Player.Move.canceled -= CanceledMove;
+        _controls.Player.Interact.performed -= TryInteract;
+        _controls.Player.Eject.performed -= EjectItem;
+        _controls.Player.SelectItemUp.performed -= MoveMenuUp;
+        _controls.Player.SelectItemDown.performed -= MoveMenuDown;
+        _controls.Player.Mask.performed -= ToggleMask;
+        _controls.Disable();
+        _controls.Dispose();
     }
 }

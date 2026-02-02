@@ -85,6 +85,7 @@ public class UIManager : MonoBehaviour
 
     public void MoveItemUp()
     {
+        print("up");
         _currentItem--;
         if (_currentItem < -1)
         {
